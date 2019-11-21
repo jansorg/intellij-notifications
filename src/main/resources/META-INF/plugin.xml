@@ -1,29 +1,33 @@
 <idea-plugin>
-  <id>dev.j-a.samples.intellij-notifications</id>
-  <name>plugin-dev.com: IntelliJ Notifications</name>
-  <version>0.1.0</version>
-  <vendor email="mail@plugin-dev.com" url="https://www.plugin-dev.com">Joachim Ansorg</vendor>
+    <id>dev.j-a.samples.intellij-notifications</id>
+    <name>plugin-dev.com: IntelliJ Notifications</name>
+    <version>0.1.0</version>
+    <vendor email="mail@plugin-dev.com" url="https://www.plugin-dev.com">Joachim Ansorg</vendor>
 
-  <description><![CDATA[]]></description>
+    <description><![CDATA[]]></description>
 
-  <change-notes><![CDATA[]]></change-notes>
+    <change-notes><![CDATA[]]></change-notes>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="192.0"/>
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="192.0"/>
 
-  <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
-       on how to target different products -->
-  <depends>com.intellij.modules.lang</depends>
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.lang</depends>
 
-  <extensionPoints>
-    <!-- Add your own extension points here -->
-  </extensionPoints>
+    <extensionPoints>
+        <!-- Add your own extension points here -->
+    </extensionPoints>
 
-  <extensions defaultExtensionNs="com.intellij">
-    <postStartupActivity implementation="dev.ja.samples.ShowNotificationActivity"/>
-  </extensions>
+    <extensions defaultExtensionNs="com.intellij">
+        <postStartupActivity implementation="dev.ja.samples.ShowNotificationActivity"/>
 
-  <actions>
-    <!-- Add your actions here -->
-  </actions>
+        <notification.parentGroup id="demo.notifications" title="Demo notifications"/>
+        <notification.group parentId="demo.notifications" groupId="demo.notifications.balloon"/>
+        <notification.group parentId="demo.notifications" groupId="demo.notifications.stickyBalloon"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
 </idea-plugin>

@@ -28,6 +28,11 @@ allprojects {
     // uncomment, if you don't need searchable options
     // buildSearchableOptions.enabled = false
 
+    runIde {
+        systemProperties.put("sun.java2d.renderer", "sun.java2d.marlin.MarlinRenderingEngine")
+        systemProperties.put("awt.useSystemAAFontSettings", "lcd")
+    }
+
     publishPlugin {
         username 'your-jetbrains-username'
         //add your user's password on the command line using '-Dintellij.publish.password=...'
@@ -48,7 +53,6 @@ allprojects {
         finalizedBy jacocoTestReport
         jacoco {
             enabled true
-            append false
             includes ["com.*"]
         }
     }

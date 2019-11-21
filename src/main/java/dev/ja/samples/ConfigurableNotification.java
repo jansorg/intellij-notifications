@@ -25,6 +25,10 @@ class ConfigurableNotification extends Notification {
         setIcon(config.icon);
         setImportant(config.isImportant);
 
+        this.whenExpired(() -> {
+
+        });
+
         if (config.dropdownText != null) {
             setDropDownText(config.dropdownText);
         }
