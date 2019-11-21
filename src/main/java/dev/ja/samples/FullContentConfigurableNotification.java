@@ -7,7 +7,7 @@ import com.intellij.notification.impl.NotificationFullContent;
  * this notification as full content.
  */
 class FullContentConfigurableNotification extends ConfigurableNotification implements NotificationFullContent {
-    public FullContentConfigurableNotification(NotificationConfig config) {
+    FullContentConfigurableNotification(NotificationConfig config) {
         super(config);
     }
 }

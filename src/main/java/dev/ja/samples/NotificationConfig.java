@@ -1,5 +1,6 @@
 package dev.ja.samples;
 
+import com.google.common.collect.Lists;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
@@ -15,37 +16,41 @@ import java.util.List;
  */
 class NotificationConfig {
     @NotNull
-    String title;
-    String subtitle;
+    final List<AnAction> actions = Lists.newArrayList();
     @NotNull
-    String content;
+    final String title;
+    final String subtitle;
+    @NotNull
+    final String content;
     @Nullable
-    String dropdownText;
+    final String dropdownText;
     @Nullable
-    Notification.CollapseActionsDirection collapseDirection;
-    Icon icon;
+    final Notification.CollapseActionsDirection collapseDirection;
+    final Icon icon;
+    final boolean actionIcons;
     @NotNull
-    NotificationGroup group;
-    boolean isFullContent;
-    boolean isImportant;
+    final NotificationGroup group;
+    final boolean isFullContent;
+    final boolean isImportant;
     @NotNull
-    NotificationType notificationType;
-    List<AnAction> actions;
+    final NotificationType notificationType;
 
     NotificationConfig(@NotNull String title, String subtitle, @NotNull String content, @Nullable String dropdownText,
                        @Nullable Notification.CollapseActionsDirection collapseDirection, Icon icon,
                        @NotNull NotificationGroup group, boolean isFullContent, boolean isImportant,
-                       @NotNull NotificationType notificationType, List<AnAction> actions) {
+                       @NotNull NotificationType notificationType, List<AnAction> actions,
+                       boolean actionIcons) {
         this.title = title;
         this.subtitle = subtitle;
         this.content = content;
         this.dropdownText = dropdownText;
         this.collapseDirection = collapseDirection;
         this.icon = icon;
+        this.actionIcons = actionIcons;
         this.group = group;
         this.isFullContent = isFullContent;
         this.isImportant = isImportant;
         this.notificationType = notificationType;
-        this.actions = actions;
+        this.actions.addAll(actions);
     }
 }

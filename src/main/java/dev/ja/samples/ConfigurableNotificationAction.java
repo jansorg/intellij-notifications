@@ -3,32 +3,31 @@ package dev.ja.samples;
 import com.intellij.notification.Notification;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.util.function.Consumer;
 
 abstract class ConfigurableNotificationAction extends AnAction {
-    ConfigurableNotificationAction(@Nls(capitalization = Nls.Capitalization.Title) @Nullable String text) {
-        super(text);
+    ConfigurableNotificationAction(@Nullable String text, String description, Icon icon) {
+        super(text, description, icon);
     }
 
     @NotNull
-    static ConfigurableNotificationAction create(@NotNull String text, @NotNull Consumer<NotificationConfigBuilder> performAction) {
-        return new ConfigurableNotificationAction(text) {
+    static ConfigurableNotificationAction create(@NotNull String text, final String description, final Icon icon, @NotNull Consumer<NotificationConfigBuilder> performAction) {
+        return new ConfigurableNotificationAction(text, description, icon) {
             @Override
             public void actionPerformed(@NotNull AnActionEvent e) {
                 ConfigurableNotification notification = (ConfigurableNotification) Notification.get(e);
 
-                NotificationConfigBuilder b = NotificationConfigBuilder.create(e.getProject(), notification.config);
-                b.resetActions();
-                performAction.accept(b);
+                NotificationConfigBuilder builder = NotificationConfigBuilder.create(e.getProject(), notification.config);
+                builder.resetActions();
+                performAction.accept(builder);
                 // add default actions, based on the current settings
-                b.addDefaultActions();
+                builder.addDefaultActions();
 
-                // notification.expire();
-                b.build().notify(e.getProject());
+                builder.build().notify(e.getProject());
             }
         };
     }

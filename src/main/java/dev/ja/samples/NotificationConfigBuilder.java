@@ -1,6 +1,7 @@
 package dev.ja.samples;
 
 import com.google.common.collect.Lists;
+import com.intellij.icons.AllIcons;
 import com.intellij.notification.Notification;
 import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
@@ -22,6 +23,7 @@ class NotificationConfigBuilder {
     private static final NotificationGroup STICKY_GROUP = new NotificationGroup("demo.stickyBalloon", NotificationDisplayType.STICKY_BALLOON, true);
 
     private final Project project;
+
     @NotNull
     private String title = "";
     private String subtitle;
@@ -33,6 +35,7 @@ class NotificationConfigBuilder {
     private Notification.CollapseActionsDirection collapseDirection;
     @Nullable
     private Icon icon;
+    private boolean actionIcons;
     @NotNull
     private NotificationGroup group = BALLOON_GROUP;
     private boolean isFullContent;
@@ -57,6 +60,7 @@ class NotificationConfigBuilder {
         b.dropdownText = config.dropdownText;
         b.collapseDirection = config.collapseDirection;
         b.icon = config.icon;
+        b.actionIcons = config.actionIcons;
         b.group = config.group;
         b.isFullContent = config.isFullContent;
         b.isImportant = config.isImportant;
@@ -111,6 +115,10 @@ class NotificationConfigBuilder {
         this.actions.add(actions);
     }
 
+    public void setActionIcons(boolean actionIcons) {
+        this.actionIcons = actionIcons;
+    }
+
     Notification build() {
         NotificationConfig config = new NotificationConfig(title,
                 subtitle,
@@ -122,7 +130,8 @@ class NotificationConfigBuilder {
                 isFullContent,
                 isImportant,
                 notificationType,
-                actions);
+                actions,
+                actionIcons);
 
         if (this.isFullContent) {
             return new FullContentConfigurableNotification(config);
@@ -140,90 +149,108 @@ class NotificationConfigBuilder {
             return;
         }
 
-        addAction(ConfigurableNotificationAction.create("Toggle full content", builder -> {
-            builder.setFullContent(!builder.isFullContent);
-        }));
+        addAction(ConfigurableNotificationAction.create(isFullContent ? "Collapse content" : "Expand content", "Expand a notification to full height",
+                actionIcons ? AllIcons.General.ExpandComponent : null,
+                builder -> builder.setFullContent(!builder.isFullContent)));
 
-        addAction(ConfigurableNotificationAction.create("Toggle important", builder -> {
-            builder.setImportant(!builder.isImportant);
-        }));
+        addAction(ConfigurableNotificationAction.create(isImportant ? "Set as not important" : "set as important", "Mark the notification as important ",
+                actionIcons ? AllIcons.General.TodoImportant : null,
+                builder -> builder.setImportant(!builder.isImportant)));
 
-        addAction(ConfigurableNotificationAction.create("As information", builder -> {
-            builder.setNotificationType(NotificationType.INFORMATION);
-        }));
-        addAction(ConfigurableNotificationAction.create("As warnings", builder -> {
-            builder.setNotificationType(NotificationType.WARNING);
-        }));
-        addAction(ConfigurableNotificationAction.create("As error", builder -> {
-            builder.setNotificationType(NotificationType.ERROR);
-        }));
+        addAction(ConfigurableNotificationAction.create("As information", "set notification type to INFORMATION",
+                actionIcons ? AllIcons.General.Information : null,
+                builder -> builder.setNotificationType(NotificationType.INFORMATION)));
+
+        addAction(ConfigurableNotificationAction.create("As warnings", "set notification type to WARNING",
+                actionIcons ? AllIcons.General.Warning : null,
+                builder -> builder.setNotificationType(NotificationType.WARNING)));
+
+        addAction(ConfigurableNotificationAction.create("As error", "set notification type to ERROR",
+                actionIcons ? AllIcons.General.Error : null,
+                builder -> builder.setNotificationType(NotificationType.ERROR)));
 
         if (collapseDirection == Notification.CollapseActionsDirection.KEEP_LEFTMOST) {
-            addAction(ConfigurableNotificationAction.create("collapse left", builder -> {
-                builder.setCollapseDirection(Notification.CollapseActionsDirection.KEEP_RIGHTMOST);
-            }));
+            addAction(ConfigurableNotificationAction.create("collapse left", "collapse action on the left",
+                    actionIcons ? AllIcons.General.CollapseComponent : null,
+                    builder -> builder.setCollapseDirection(Notification.CollapseActionsDirection.KEEP_RIGHTMOST)));
         } else {
-            addAction(ConfigurableNotificationAction.create("collapse right", builder -> {
-                builder.setCollapseDirection(Notification.CollapseActionsDirection.KEEP_LEFTMOST);
-            }));
+            addAction(ConfigurableNotificationAction.create("collapse right", "collapse actions on the right",
+                    actionIcons ? AllIcons.General.CollapseComponent : null,
+                    builder -> builder.setCollapseDirection(Notification.CollapseActionsDirection.KEEP_LEFTMOST)));
         }
 
-        addAction(ConfigurableNotificationAction.create("set title", builder -> {
-            String value = Messages.showInputDialog(project, "Title:", "Notification Title", null, builder.title, null);
-            if (value != null) {
-                builder.setTitle(value);
-            }
-        }));
+        addAction(ConfigurableNotificationAction.create("set title", "modify the title",
+                actionIcons ? AllIcons.General.Inline_edit : null,
+                builder -> {
+                    String value = Messages.showInputDialog(project, "Title:", "Notification Title", null, builder.title, null);
+                    if (value != null) {
+                        builder.setTitle(value);
+                    }
+                }));
 
-        addAction(ConfigurableNotificationAction.create("set subtitle", builder -> {
-            String value = Messages.showInputDialog(project, "Subtitle:", "Notification Subtitle", null, builder.subtitle, null);
-            if (value != null) {
-                builder.setSubtitle(value);
-            }
-        }));
+        addAction(ConfigurableNotificationAction.create("set subtitle", "modify the subtitle",
+                actionIcons ? AllIcons.General.Inline_edit : null,
+                builder -> {
+                    String value = Messages.showInputDialog(project, "Subtitle:", "Notification Subtitle", null, builder.subtitle, null);
+                    if (value != null) {
+                        builder.setSubtitle(value);
+                    }
+                }));
 
-        addAction(ConfigurableNotificationAction.create("set content", builder -> {
-            String value = Messages.showMultilineInputDialog(project, "Content:", "Notification Content", builder.content, builder.icon, null);
-            if (value != null) {
-                builder.setContent(value);
-            }
-        }));
+        addAction(ConfigurableNotificationAction.create("set content", "modify the content",
+                actionIcons ? AllIcons.General.Inline_edit : null,
+                builder -> {
+                    String value = Messages.showMultilineInputDialog(project, "Content:", "Notification Content", builder.content, null, null);
+                    if (value != null) {
+                        builder.setContent(value);
+                    }
+                }));
 
-        addAction(ConfigurableNotificationAction.create("set dropdown text", builder -> {
-            String value = Messages.showInputDialog(project, "Dropdown text:", "Notification Dropdown Text", null, builder.dropdownText, null);
-            if (value != null) {
-                builder.setDropdownText(value);
-            }
-        }));
+        addAction(ConfigurableNotificationAction.create("set dropdown text", "set the action dropdown text",
+                actionIcons ? AllIcons.General.Dropdown : null,
+                builder -> {
+                    String value = Messages.showInputDialog(project, "Dropdown text:", "Notification Dropdown Text", null, builder.dropdownText, null);
+                    if (value != null) {
+                        builder.setDropdownText(value);
+                    }
+                }));
 
         if (group.getDisplayType() != NotificationDisplayType.STICKY_BALLOON) {
-            addAction(ConfigurableNotificationAction.create("sticky", builder -> {
-                builder.setGroup(STICKY_GROUP);
-            }));
+            addAction(ConfigurableNotificationAction.create("sticky", "make the notification sticky",
+                    actionIcons ? AllIcons.General.Balloon : null,
+                    builder -> builder.setGroup(STICKY_GROUP)));
         }
+
         if (group.getDisplayType() != NotificationDisplayType.BALLOON) {
-            addAction(ConfigurableNotificationAction.create("sticky", builder -> {
-                builder.setGroup(BALLOON_GROUP);
-            }));
+            addAction(ConfigurableNotificationAction.create("non-sticky", "make the notification non-sticky",
+                    actionIcons ? AllIcons.General.Balloon : null,
+                    builder -> builder.setGroup(BALLOON_GROUP)));
         }
+
         if (group.getDisplayType() != NotificationDisplayType.TOOL_WINDOW) {
-            addAction(ConfigurableNotificationAction.create("tool window", builder -> {
-                String activeId = ToolWindowManager.getActiveId();
-                if (activeId == null) {
-                    activeId = ToolWindowManagerEx.getInstance(project).getToolWindowIds()[0];
-                }
-                builder.setGroup(NotificationGroup.toolWindowGroup("demo.notifications.toolwindow", activeId));
-            }));
+            addAction(ConfigurableNotificationAction.create("tool window notification", "show the notification for a tool window",
+                    actionIcons ? AllIcons.General.HideToolWindow : null,
+                    builder -> {
+                        String activeId = ToolWindowManager.getActiveId();
+                        if (activeId == null) {
+                            activeId = ToolWindowManagerEx.getInstance(project).getToolWindowIds()[0];
+                        }
+                        builder.setGroup(NotificationGroup.toolWindowGroup("demo.notifications.toolwindow", activeId));
+                    }));
         }
 
         if (icon == null) {
-            addAction(ConfigurableNotificationAction.create("with icon", builder -> {
-                builder.setIcon(PlatformIcons.PROJECT_ICON);
-            }));
+            addAction(ConfigurableNotificationAction.create("with custom notification icon", "set the icon of the notification",
+                    actionIcons ? AllIcons.General.Note : null,
+                    builder -> builder.setIcon(PlatformIcons.PROJECT_ICON)));
         } else {
-            addAction(ConfigurableNotificationAction.create("no icon", builder -> {
-                builder.setIcon(null);
-            }));
+            addAction(ConfigurableNotificationAction.create("no custom notification icon", "use the default notification icons",
+                    actionIcons ? AllIcons.General.Note : null,
+                    builder -> builder.setIcon(null)));
         }
+
+        addAction(ConfigurableNotificationAction.create(actionIcons ? "Hide action icons" : "Show action icons", "show/hide icons of actions",
+                actionIcons ? AllIcons.Actions.Show : null,
+                builder -> builder.setActionIcons(!actionIcons)));
     }
 }

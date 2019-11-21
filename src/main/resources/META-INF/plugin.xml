@@ -20,7 +20,6 @@
   </extensionPoints>
 
   <extensions defaultExtensionNs="com.intellij">
-    <applicationService serviceImplementation="dev.ja.samples.DemoNotificationService"/>
     <postStartupActivity implementation="dev.ja.samples.ShowNotificationActivity"/>
   </extensions>
 
