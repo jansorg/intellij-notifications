@@ -1,22 +1,20 @@
 <idea-plugin>
-  <id>com.your.company.unique.plugin.id</id>
-  <name>Plugin display name here</name>
+  <id>dev.j-a.samples.intellij-notifications</id>
+  <name>[plugin-dev] IntelliJ Notifications</name>
   <version>0.1.0</version>
-  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+  <vendor email="mail@plugin-dev.com" url="https://www.plugin-dev.com">Joachim Ansorg</vendor>
 
   <description><![CDATA[
-      Enter short description for your plugin here.<br>
-      <em>most HTML tags may be used</em>
+
     ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
-      <em>most HTML tags may be used</em>
+
     ]]>
   </change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
-  <idea-version since-build="183.0"/>
+  <idea-version since-build="192.0"/>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
        on how to target different products -->
