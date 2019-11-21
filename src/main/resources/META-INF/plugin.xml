@@ -1,17 +1,12 @@
 <idea-plugin>
   <id>dev.j-a.samples.intellij-notifications</id>
-  <name>[plugin-dev] IntelliJ Notifications</name>
+  <name>plugin-dev.com: IntelliJ Notifications</name>
   <version>0.1.0</version>
   <vendor email="mail@plugin-dev.com" url="https://www.plugin-dev.com">Joachim Ansorg</vendor>
 
-  <description><![CDATA[
+  <description><![CDATA[]]></description>
 
-    ]]></description>
-
-  <change-notes><![CDATA[
-
-    ]]>
-  </change-notes>
+  <change-notes><![CDATA[]]></change-notes>
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
   <idea-version since-build="192.0"/>
@@ -25,7 +20,8 @@
   </extensionPoints>
 
   <extensions defaultExtensionNs="com.intellij">
-    <!-- Add your extensions here -->
+    <applicationService serviceImplementation="dev.ja.samples.DemoNotificationService"/>
+    <postStartupActivity implementation="dev.ja.samples.ShowNotificationActivity"/>
   </extensions>
 
   <actions>
