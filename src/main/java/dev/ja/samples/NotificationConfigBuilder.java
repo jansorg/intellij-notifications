@@ -7,6 +7,7 @@ import com.intellij.notification.NotificationDisplayType;
 import com.intellij.notification.NotificationGroup;
 import com.intellij.notification.NotificationType;
 import com.intellij.openapi.actionSystem.AnAction;
+import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.wm.ToolWindowManager;
@@ -43,6 +44,8 @@ class NotificationConfigBuilder {
     @NotNull
     private NotificationType notificationType = NotificationType.INFORMATION;
     private List<AnAction> actions = Lists.newArrayList();
+    @Nullable
+    private AnAction contextHelpAction;
 
     private NotificationConfigBuilder(Project project) {
         this.project = project;
@@ -65,6 +68,7 @@ class NotificationConfigBuilder {
         b.isFullContent = config.isFullContent;
         b.isImportant = config.isImportant;
         b.notificationType = config.notificationType;
+        b.contextHelpAction = config.contextHelpAction;
 
         b.actions.addAll(config.actions);
 
@@ -119,6 +123,10 @@ class NotificationConfigBuilder {
         this.actionIcons = actionIcons;
     }
 
+    public void setContextHelpAction(@Nullable AnAction contextHelpAction) {
+        this.contextHelpAction = contextHelpAction;
+    }
+
     Notification build() {
         NotificationConfig config = new NotificationConfig(title,
                 subtitle,
@@ -131,7 +139,8 @@ class NotificationConfigBuilder {
                 isImportant,
                 notificationType,
                 actions,
-                actionIcons);
+                actionIcons,
+                contextHelpAction);
 
         if (this.isFullContent) {
             return new FullContentConfigurableNotification(config);
@@ -252,5 +261,19 @@ class NotificationConfigBuilder {
         addAction(ConfigurableNotificationAction.create(actionIcons ? "Hide action icons" : "Show action icons", "show/hide icons of actions",
                 actionIcons ? AllIcons.Actions.Show : null,
                 builder -> builder.setActionIcons(!actionIcons)));
+
+        if (contextHelpAction == null) {
+            addAction(ConfigurableNotificationAction.create("With context help action", "show/hide context help action",
+                    actionIcons ? AllIcons.Actions.Help : null,
+                    builder -> builder.setContextHelpAction(new AnAction("Help!", "<em>This</em> is the context help action of this notification!", null) {
+                        @Override
+                        public void actionPerformed(@NotNull AnActionEvent e) {
+                        }
+                    })));
+        } else {
+            addAction(ConfigurableNotificationAction.create("No context help action", "show/hide context help action",
+                    actionIcons ? AllIcons.Actions.Help : null,
+                    builder -> builder.setContextHelpAction(null)));
+        }
     }
 }

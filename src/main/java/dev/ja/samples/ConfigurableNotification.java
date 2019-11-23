@@ -25,10 +25,6 @@ class ConfigurableNotification extends Notification {
         setIcon(config.icon);
         setImportant(config.isImportant);
 
-        this.whenExpired(() -> {
-
-        });
-
         if (config.dropdownText != null) {
             setDropDownText(config.dropdownText);
         }
@@ -36,6 +32,8 @@ class ConfigurableNotification extends Notification {
         if (config.collapseDirection != null) {
             setCollapseActionsDirection(config.collapseDirection);
         }
+
+        setContextHelpAction(config.contextHelpAction);
 
         for (AnAction action : config.actions) {
             addAction(action);

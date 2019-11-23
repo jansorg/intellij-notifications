@@ -26,6 +26,7 @@ class NotificationConfig {
     final String dropdownText;
     @Nullable
     final Notification.CollapseActionsDirection collapseDirection;
+    @Nullable
     final Icon icon;
     final boolean actionIcons;
     @NotNull
@@ -34,12 +35,14 @@ class NotificationConfig {
     final boolean isImportant;
     @NotNull
     final NotificationType notificationType;
+    @Nullable
+    public AnAction contextHelpAction;
 
     NotificationConfig(@NotNull String title, String subtitle, @NotNull String content, @Nullable String dropdownText,
-                       @Nullable Notification.CollapseActionsDirection collapseDirection, Icon icon,
+                       @Nullable Notification.CollapseActionsDirection collapseDirection, @Nullable Icon icon,
                        @NotNull NotificationGroup group, boolean isFullContent, boolean isImportant,
-                       @NotNull NotificationType notificationType, List<AnAction> actions,
-                       boolean actionIcons) {
+                       @NotNull NotificationType notificationType, @NotNull List<AnAction> actions,
+                       boolean actionIcons, @Nullable AnAction contextHelpAction) {
         this.title = title;
         this.subtitle = subtitle;
         this.content = content;
@@ -51,6 +54,7 @@ class NotificationConfig {
         this.isFullContent = isFullContent;
         this.isImportant = isImportant;
         this.notificationType = notificationType;
+        this.contextHelpAction = contextHelpAction;
         this.actions.addAll(actions);
     }
 }
